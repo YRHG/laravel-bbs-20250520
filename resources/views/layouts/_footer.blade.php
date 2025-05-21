@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container">
         <p class="float-start">
-            由 <a href="https://localhost:8000" target="_blank">LuStormstout</a> 设计和编码 <span
+            由 <a href="https://localhost:8000" target="_blank">AlbertHan</a> 设计和编码 <span
                 style="color: #e27575;font-size: 14px;">❤</span>
         </p>
 
