@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                // 'resources/scss/app.scss', // 如果使用 SCSS
+                'resources/scss/app.scss', // 如果使用 SCSS
                 'resources/css/app.css', // 如果使用普通 CSS
                 'resources/js/app.js'
             ],
