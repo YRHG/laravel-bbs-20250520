@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PagesController::class, 'root'])->name('root');
@@ -34,3 +35,9 @@ Route::post('password/confirm', [ConfirmPasswordController::class, 'confirm']);
 Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
 Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+// 用户资源路由
+Route::resource('users', UsersController::class)->only(['show', 'update', 'edit']);
+// GET|HEAD        users/{user} .......... users.show › UsersController@show
+// PUT|PATCH       users/{user} ...... users.update › UsersController@update
+// GET|HEAD        users/{user}/edit ..... users.edit › UsersController@edit
