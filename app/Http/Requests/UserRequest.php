@@ -23,7 +23,7 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|between:3,25|regex:/^[A-Za-z0-9\-\_]+$/|unique:users,name,' . auth()->user()->id,
+            'name' => 'required|between:3,25|string|unique:users,name,' . auth()->user()->id,
             'email' => 'required|email|unique:users,email,' . auth()->user()->id,
             'introduction' => 'max:80',
         ];

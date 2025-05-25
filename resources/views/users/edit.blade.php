@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4>
-                        <i class="glyphicon glyphicon-edit"></i> {{ __('Edit profile') }}
+                        <i class="glyphicon glyphicon-edit"></i> {{ __('プロフィールを編集') }}
                     </h4>
                 </div>
 
