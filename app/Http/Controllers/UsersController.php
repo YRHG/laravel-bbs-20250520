@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -38,9 +39,19 @@ class UsersController extends Controller
      * @param User $user
      * @return RedirectResponse
      */
-    public function update(UserRequest $request, User $user): RedirectResponse
+    public function update(UserRequest $request, ImageUploadHandler $uploader, User $user): RedirectResponse
     {
-        $user->update($request->all());
+        $data = $request->all();
+
+        if ($request->avatar){
+            $result = $uploader->save($request->avatar, 'avatars', $user->id, 416);
+            if ($result === false) {
+                return redirect()->back()->withErrors('Image upload failed. Please try again.');
+            }
+            $data['avatar'] = $result['path'];
+        }
+
+        $user->update($data);
         return redirect()->route('users.show', $user->id)->with('success', 'Profile updated successfully.');
     }
 }
