@@ -5,6 +5,13 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class UserRequest
+ *
+ * Handles validation for user profile updates.
+ *
+ * @property $avatar
+ */
 class UserRequest extends FormRequest
 {
     /**
