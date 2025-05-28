@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('topics', function (Blueprint $table) {
+        Schema::create('topic', function (Blueprint $table) {
             $table->id();
             $table->string('title')->index()->nullable(false)->comment('标题');
             $table->text('body')->nullable(false)->comment('内容');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('topics');
+        Schema::dropIfExists('topic');
     }
 };
