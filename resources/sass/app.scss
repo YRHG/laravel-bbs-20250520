@@ -1,6 +1,8 @@
+// resources/sass/app.scss
+
 @use 'variables' as *;
 
-// Fontawesome
+// Fontawesome 字体图标库
 @use '@fortawesome/fontawesome-free/scss/fontawesome';
 
 @import url('https://fonts.bunny.net/css?family=Nunito');
@@ -34,7 +36,7 @@ html {
 }
 
 body {
-    /* 给底部留出空间 */
+    /* 底部留出与 footer 高度相等的外边距 */
     margin-bottom: 60px;
 }
 
@@ -43,7 +45,7 @@ body {
     margin-top: 60px;
     bottom: 0;
     width: 100%;
-    /* 设置 footer 的固定高度 */
+    /* 固定 footer 高度 */
     height: 60px;
     background-color: #000;
 
@@ -73,8 +75,8 @@ body {
     }
 }
 
-/* 话题列表页面 */
-.topics-index-page {
+/* 话题列表页和分类详情页 */
+.topics-index-page, .categories-show-page {
     .topic-list {
         .nav > li > a {
             position: relative;
@@ -110,7 +112,7 @@ body {
     }
 }
 
-/* 容器与底部间距 */
+/* 给 #app 下的 container 添加底部间距，避免内容被 footer 遮挡 */
 #app > div.container {
     margin-bottom: 100px;
 }
