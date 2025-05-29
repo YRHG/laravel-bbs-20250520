@@ -9,10 +9,10 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
-     * 除了 'show' 方法外，控制器中的所有其他方法都需要用户登录后才能访问。
+     * 除了 show 方法外，控制器中的其他方法都需要登录权限。
      */
     public function __construct()
     {
@@ -20,10 +20,10 @@ class UsersController extends Controller
     }
 
     /**
-     * 显示用户的个人资料页面。
+     * 显示用户个人主页。
      *
-     * @param User $user
-     * @return View
+     * @param User $user 用户模型实例
+     * @return View 返回视图
      */
     public function show(User $user): View
     {
@@ -31,32 +31,33 @@ class UsersController extends Controller
     }
 
     /**
-     * 显示编辑用户个人资料的表单。
+     * 显示编辑用户资料的表单。
      *
-     * @param User $user
-     * @return View
-     * @throws AuthorizationException
+     * @param User $user 用户模型实例
+     * @return View 返回视图
+     * @throws AuthorizationException 授权失败时抛出异常
      */
     public function edit(User $user): View
     {
-        $this->authorize('update', $user);
+        $this->authorize('update', $user); // 权限检查
         return view('users.edit', compact('user'));
     }
 
     /**
-     * 更新用户的个人资料。
+     * 更新用户资料。
      *
-     * @param UserRequest $request
-     * @param ImageUploadHandler $uploader
-     * @param User $user
-     * @return RedirectResponse
-     * @throws AuthorizationException
+     * @param UserRequest $request 表单验证请求
+     * @param ImageUploadHandler $uploader 图片上传处理类
+     * @param User $user 用户模型实例
+     * @return RedirectResponse 重定向响应
+     * @throws AuthorizationException 授权失败时抛出异常
      */
     public function update(UserRequest $request, ImageUploadHandler $uploader, User $user): RedirectResponse
     {
-        $this->authorize('update', $user);
+        $this->authorize('update', $user); // 权限检查
         $data = $request->all();
 
+        // 如果上传了头像图片
         if ($request->avatar) {
             $result = $uploader->save($request->avatar, 'avatars', $user->id, 416);
             if ($result === false) {
@@ -65,7 +66,7 @@ class UsersController extends Controller
             $data['avatar'] = $result['path'];
         }
 
-        $user->update($data);
+        $user->update($data); // 更新用户资料
         return redirect()->route('users.show', $user->id)->with('success', '个人资料更新成功。');
     }
 }
