@@ -14,7 +14,7 @@
     <title>@yield('title', config('app.name'))</title>
 
     <!-- Use vite include styles and scripts. -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @yield('styles')
 
 </head>
 
@@ -33,5 +33,6 @@
 
     @include('layouts._footer')
 </div>
+     @yield('scripts')
 </body>
 </html>
