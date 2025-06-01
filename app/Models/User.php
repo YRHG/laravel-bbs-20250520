@@ -16,24 +16,18 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
- * 用户模型
+ *
  *
  * @property int $id
- * @property string $name 用户名
- * @property string $email 邮箱
- * @property Carbon|null $email_verified_at 邮箱验证时间
- * @property string $password 密码
- * @property string|null $remember_token 记住登录 Token
- * @property Carbon|null $created_at 创建时间
- * @property Carbon|null $updated_at 更新时间
- * @property string|null $avatar 头像
- * @property string|null $introduction 个人简介
- *
- * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications 用户通知集合
- * @property-read int|null $notifications_count 通知数量
- * @property-read Collection<int, Topic> $topics 用户发布的话题集合
- * @property-read int|null $topics_count 话题数量
- *
+ * @property string $name
+ * @property string $email
+ * @property Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
  * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -46,9 +40,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|User wherePassword($value)
  * @method static Builder<static>|User whereRememberToken($value)
  * @method static Builder<static>|User whereUpdatedAt($value)
+ * @property string|null $avatar 头像
+ * @property string|null $introduction 个人简介
  * @method static Builder<static>|User whereAvatar($value)
  * @method static Builder<static>|User whereIntroduction($value)
- *
+ * @property-read Collection<int, Topic> $topics
+ * @property-read int|null $topics_count
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
@@ -57,7 +54,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable, MustVerifyEmailTrait;
 
     /**
-     * 可批量赋值的属性。
+     * The attributes that are mass assignable.
      *
      * @var list<string>
      */
@@ -70,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * 序列化时应隐藏的属性。
+     * The attributes that should be hidden for serialization.
      *
      * @var list<string>
      */
@@ -80,20 +77,20 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * 应该被类型转换的属性。
+     * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime', // 邮箱验证时间为日期时间类型
-            'password' => 'hashed', // 密码使用 Laravel 的自动加密功能
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
         ];
     }
 
     /**
-     * 用户拥有多个话题。
+     * User has many topic.
      *
      * @return HasMany
      */

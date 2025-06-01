@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * 话题模型
+ *
  *
  * @property int $id
  * @property string $title 标题
@@ -24,11 +24,11 @@ use Illuminate\Support\Carbon;
  * @property int|null $last_reply_user_id 最后回复用户ID
  * @property int $order 排序
  * @property string|null $excerpt 摘要
- * @property string|null $slug 别名（SEO）
- * @property Carbon|null $created_at 创建时间
- * @property Carbon|null $updated_at 更新时间
- * @property-read Category|null $category 关联的分类
- * @property-read User|null $user 关联的用户
+ * @property string|null $slug 别名
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Category|null $category
+ * @property-read User|null $user
  * @method static TopicFactory factory($count = null, $state = [])
  * @method static Builder<static>|Topic newModelQuery()
  * @method static Builder<static>|Topic newQuery()
@@ -46,9 +46,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Topic whereUpdatedAt($value)
  * @method static Builder<static>|Topic whereUserId($value)
  * @method static Builder<static>|Topic whereViewCount($value)
- * @method static Builder<static>|Topic recent() 按创建时间排序
- * @method static Builder<static>|Topic recentReplied() 按最后回复时间排序
- * @method static Builder<static>|Topic withOrder(string $order) 根据传入的排序条件排序
+ * @method static Builder<static>|Topic recent()
+ * @method static Builder<static>|Topic recentReplied()
+ * @method static Builder<static>|Topic withOrder(string $order)
  * @mixin \Eloquent
  */
 #[ObservedBy(TopicObserver::class)]
@@ -59,7 +59,7 @@ class Topic extends Model
     protected $fillable = ['title', 'body', 'category_id', 'excerpt', 'slug'];
 
     /**
-     * 话题属于一个用户。
+     * Topic belongs to a User.
      *
      * @return BelongsTo
      */
@@ -69,7 +69,7 @@ class Topic extends Model
     }
 
     /**
-     * 话题属于一个分类。
+     * Topic belongs to a Category.
      *
      * @return BelongsTo
      */
@@ -79,10 +79,10 @@ class Topic extends Model
     }
 
     /**
-     * 根据传入的排序参数进行排序。
+     * Scope a query to order topics based on the specified order.
      *
      * @param $query
-     * @param string|null $order 排序参数，如 recent 或 recentReplied
+     * @param string|null $order
      * @return void
      */
     public function scopeWithOrder($query, ?string $order): void
@@ -98,7 +98,7 @@ class Topic extends Model
     }
 
     /**
-     * 按创建时间倒序排序话题。
+     * Scope a query to order topics by creation date.
      *
      * @param Builder $query
      * @return Builder
@@ -109,15 +109,15 @@ class Topic extends Model
     }
 
     /**
-     * 按最后回复时间倒序排序话题。
+     * Scope a query to order topics by the most recent reply.
      *
      * @param Builder $query
      * @return Builder
      */
     public function scopeRecentReplied(Builder $query): Builder
     {
-        // 当话题有新回复时，我们会更新 reply_count，
-        // 同时 updated_at 时间戳也会被自动更新
+        // 当话题有新回复时，我们将编写逻辑来更新话题模型的 reply_count 属性，
+        // 此时会自动触发框架对数据模型 updated_at 时间戳的更新
         return $query->orderBy('updated_at', 'desc');
     }
 }

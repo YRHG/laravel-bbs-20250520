@@ -9,11 +9,14 @@
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
     <!-- CSRF Token -->
+    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', config('app.name'))</title>
 
     <!-- Use vite include styles and scripts. -->
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
     @yield('styles')
 
 </head>
@@ -33,6 +36,7 @@
 
     @include('layouts._footer')
 </div>
-     @yield('scripts')
+
+@yield('scripts')
 </body>
 </html>

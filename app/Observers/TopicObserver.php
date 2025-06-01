@@ -7,7 +7,7 @@ use App\Models\Topic;
 class TopicObserver
 {
     /**
-     * 当话题被创建或更新时，从内容生成摘要。
+     * When a topic is being created or updated, generate an excerpt from the body.
      *
      * @param Topic $topic
      * @return void

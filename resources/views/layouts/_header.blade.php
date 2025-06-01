@@ -1,4 +1,3 @@
-
 @php
     use App\Models\Category;
 
@@ -14,64 +13,76 @@
         $currentCategoryId = $currentCategoryParam instanceof Category ? $currentCategoryParam->id : $currentCategoryParam;
     }
 @endphp
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-static-top">
     <div class="container">
-        <!-- Branding Image 左边 -->
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', '纯阳宫') }}
         </a>
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
 
-            <!-- 左侧空ul（或者你之前的菜单） -->
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item "><a class="nav-link {{ request()->routeIs('topics.index') ? 'active' : '' }}" href="{{ route('topics.index') }}">トピック</a></li>
-                    @if($categories->count())
-                        @foreach($categories as $category)
-                            <li class="nav-item">
-                                <a class="nav-link {{ (request()->routeIs('categories.show') && $currentCategoryId == $category->id) ? 'active' : '' }}"
-                                   href="{{ route('categories.show', $category->id) }}">{{ __($category->name) }}</a>
-                            </li>
-                        @endforeach
-                    @endif
-                </ul>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('topics.index') ? 'active' : '' }}" href="{{ route('topics.index') }}">话题</a></li>
+                @if($categories->count())
+                    @foreach($categories as $category)
+                        <li class="nav-item">
+                            <a class="nav-link {{ (request()->routeIs('categories.show') && $currentCategoryId == $category->id) ? 'active' : '' }}"
+                               href="{{ route('categories.show', $category->id) }}">{{ __($category->name) }}</a>
+                        </li>
+                    @endforeach
+                @endif
+            </ul>
+
+            <a class="navbar-brand mx-auto d-none d-lg-block" href="{{ url('/') }}">
+                {{-- 请将 'images/logo.png' 替换为您的Logo图片路径，并根据需要调整 height --}}
+                <img src="{{ asset('images/JX3_Online_logo.png') }}" alt="{{ config('app.name', '纯阳宫') }} Logo" style="height: 35px;">
+            </a>
 
 
-                <!-- 中间图标 -->
-            <div class="d-flex justify-content-center flex-grow-1">
-                <img src="{{ asset('images/JX3_Online_logo.jpg') }}" alt="Logo" style="height:40px;">
-
-            </div>
-
-            <!-- 右侧用户信息 -->
-            <ul class="navbar-nav navbar-right">
-                <!-- 认证相关链接 -->
+            <ul class="navbar-nav ms-auto">
                 @guest
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link mt-1 mr-3 font-weight-bold" href="{{ route('topics.create') }}">
+
+                        <a class="nav-link mt-1 me-lg-2 fw-bold" href="{{ route('topics.create') }}">
                             <i class="fa-solid fa-plus"></i>
                         </a>
                     </li>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ auth()->user()->avatar }}"
+                                 class="img-responsive img-circle" width="30px" height="30px" alt="{{ auth()->user()->name }}'s avatar">
+                            {{ auth()->user()->name }}
+                        </a>
+                        {{-- Bootstrap 5 下拉菜单对齐 --}}
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item"
-                               href="{{ route('users.show', auth()->user()) }}">{{ __('Profile') }}</a>
+                               href="{{ route('users.show', auth()->user()) }}">
+                                <i class="far fa-user me-2"></i>&nbsp;
+                                {{ __('Profile') }}
+                            </a>
                             <a class="dropdown-item"
-                               href="{{ route('users.edit', auth()->user()) }}">{{ __('Edit Profile') }}</a>
+                               href="{{ route('users.edit', auth()->user()) }}">
+                                <i class="far fa-edit me-2"></i>&nbsp;
+                                {{ __('Edit Profile') }}
+                            </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
-                                <form action="{{ route('logout') }}" method="POST">
+                                {{-- 对于 onsubmit confirm, 如果需要本地化: confirm('{{ __("Are you sure you want to log out?") }}') --}}
+                                <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Are you sure you want to log out?');">
                                     @csrf
-                                    <button class="btn btn-block btn-danger" type="submit"
+                                    {{-- btn-block 是 Bootstrap 4 的类, Bootstrap 5 使用 w-100 --}}
+                                    <button class="btn btn-danger w-100" type="submit"
                                             name="button">{{ __('Logout') }}</button>
                                 </form>
                             </a>
