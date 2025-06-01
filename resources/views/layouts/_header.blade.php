@@ -39,7 +39,7 @@
             </ul>
 
             <a class="navbar-brand mx-auto d-none d-lg-block" href="{{ url('/') }}">
-                {{-- 请将 'images/logo.png' 替换为您的Logo图片路径，并根据需要调整 height --}}
+
                 <img src="{{ asset('images/JX3_Online_logo.png') }}" alt="{{ config('app.name', '纯阳宫') }} Logo" style="height: 35px;">
             </a>
 
