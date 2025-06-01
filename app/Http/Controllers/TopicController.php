@@ -4,42 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTopicRequest;
 use App\Http\Requests\UpdateTopicRequest;
+use App\Models\Category;
 use App\Models\Topic;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TopicController extends Controller
 {
     /**
-     * 显示主题列表。
+     * 只有已认证用户才能创建、编辑和删除话题。
+     */
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
+    /**
+     * 显示话题列表。
+     *
+     * @param Request $request
+     * @param Topic $topic
+     * @return View
      */
     public function index(Request $request, Topic $topic): View
     {
-        $topics = $topic->withOrder($request->order) // 根据请求参数排序
-        ->with(['user', 'category'])             // 预加载用户和分类，避免 N+1 问题
-        ->paginate($this->perPage);              // 分页查询
+        $topics = $topic->withOrder($request->order)
+            ->with(['user', 'category'])
+            ->paginate($this->perPage);
 
         return view('topics.index', compact('topics'));
     }
 
     /**
-     * 显示创建新主题的表单。
+     * 显示创建话题的表单。
+     *
+     * @param Topic $topic
+     * @return View
      */
-    public function create()
+    public function create(Topic $topic): View
     {
-        //
+        $categories = Category::all();
+        return view('topics.create_and_edit', compact('topic', 'categories'));
     }
 
     /**
-     * 将新创建的主题保存到数据库。
+     * 存储新创建的话题。
+     *
+     * @param StoreTopicRequest $request
+     * @param Topic $topic
+     * @return RedirectResponse
      */
-    public function store(StoreTopicRequest $request)
+    public function store(StoreTopicRequest $request, Topic $topic): RedirectResponse
     {
-        //
+        $topic->fill($request->validated());
+        $topic->user()->associate($request->user());
+        $topic->save();
+
+        return redirect()->route('topics.show', $topic)->with('success', '话题创建成功。');
     }
 
     /**
-     * 显示指定的主题详情。
+     * 显示指定的话题详情。
      */
     public function show(Topic $topic): View
     {
@@ -47,7 +73,7 @@ class TopicController extends Controller
     }
 
     /**
-     * 显示编辑指定主题的表单。
+     * 显示编辑话题的表单。
      */
     public function edit(Topic $topic)
     {
@@ -55,7 +81,7 @@ class TopicController extends Controller
     }
 
     /**
-     * 更新指定的主题数据。
+     * 更新指定的话题。
      */
     public function update(UpdateTopicRequest $request, Topic $topic)
     {
@@ -63,7 +89,7 @@ class TopicController extends Controller
     }
 
     /**
-     * 删除指定的主题。
+     * 删除指定的话题。
      */
     public function destroy(Topic $topic)
     {

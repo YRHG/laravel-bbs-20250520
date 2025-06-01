@@ -31,7 +31,7 @@
 
             <!-- 左侧空ul（或者你之前的菜单） -->
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item "><a class="nav-link {{ request()->routeIs('topics.index') ? 'active' : '' }}" href="{{ route('topics.index') }}">话题</a></li>
+                    <li class="nav-item "><a class="nav-link {{ request()->routeIs('topics.index') ? 'active' : '' }}" href="{{ route('topics.index') }}">トピック</a></li>
                     @if($categories->count())
                         @foreach($categories as $category)
                             <li class="nav-item">
