@@ -31,3 +31,4 @@ _ide_helper.php
 
 # User upload files
 /public/uploads/images/avatars
+/public/uploads/images/topics

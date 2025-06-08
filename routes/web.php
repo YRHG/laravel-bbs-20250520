@@ -49,3 +49,6 @@ Route::resource('topics', TopicController::class);
 
 // 按照分类显示话题
 Route::resource('categories', CategoryController::class)->only(['show']);
+
+// 话题上传图片
+Route::post('upload_image', [TopicController::class, 'uploadImage'])->name('topics.upload_image');

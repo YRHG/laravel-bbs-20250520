@@ -8,9 +8,9 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreTopicRequest extends FormRequest
 {
     /**
-     * 确定用户是否有权限发起此请求。
+     * 判断用户是否有权限发起此请求。
      *
-     * @return bool 返回 true 表示所有用户都允许通过验证（一般在创建话题时已登录）
+     * 这里返回 true，表示所有用户都可以使用该请求类（通常权限在控制器或策略中判断）。
      */
     public function authorize(): bool
     {
@@ -18,16 +18,21 @@ class StoreTopicRequest extends FormRequest
     }
 
     /**
-     * 获取应用于该请求的验证规则。
+     * 获取该请求的验证规则。
      *
-     * @return array<string, ValidationRule|array|string> 返回字段的验证规则数组
+     * @return array<string, ValidationRule|array|string> 返回字段验证规则的数组
      */
     public function rules(): array
     {
         return [
-            'title' => 'required|min:3|max:30',               // 标题：必填，长度 3～30 字符
-            'body' => 'required|min:3',                       // 内容：必填，最少 3 字符
-            'category_id' => 'required|exists:categories,id', // 分类 ID：必填，且必须存在于 categories 表中
+            // 标题为必填，最少3个字符，最多30个字符
+            'title' => 'required|min:3|max:30',
+
+            // 内容为必填，最少3个字符
+            'body' => 'required|min:3',
+
+            // 分类ID为必填，且必须存在于 categories 表的 id 字段中
+            'category_id' => 'required|exists:categories,id',
         ];
     }
 }

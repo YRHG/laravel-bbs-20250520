@@ -2,7 +2,7 @@
 
 @use 'variables' as *;
 
-// Fontawesome 字体图标库
+// Fontawesome
 @use '@fortawesome/fontawesome-free/scss/fontawesome';
 
 @import url('https://fonts.bunny.net/css?family=Nunito');
@@ -18,7 +18,7 @@ body {
     font-size: 14px;
 }
 
-/* 头部导航栏样式 */
+/* header */
 .navbar-static-top {
     border-color: #e7e7e7;
     background-color: #fff;
@@ -29,14 +29,14 @@ body {
     margin-top: 0;
 }
 
-/* 固定底部样式 */
+/* Sticky footer styles */
 html {
     position: relative;
     min-height: 100%;
 }
 
 body {
-    /* 底部留出与 footer 高度相等的外边距 */
+    /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
 
@@ -45,7 +45,7 @@ body {
     margin-top: 60px;
     bottom: 0;
     width: 100%;
-    /* 固定 footer 高度 */
+    /* Set the fixed height of the footer here */
     height: 60px;
     background-color: #000;
 
@@ -65,7 +65,7 @@ body {
     }
 }
 
-/* 用户注册页面 */
+/* User register page */
 .register-page {
     img.captcha {
         cursor: pointer;
@@ -75,7 +75,7 @@ body {
     }
 }
 
-/* 话题列表页和分类详情页 */
+/* Topic Index Page */
 .topics-index-page, .categories-show-page {
     .topic-list {
         .nav > li > a {
@@ -112,7 +112,24 @@ body {
     }
 }
 
-/* 给 #app 下的 container 添加底部间距，避免内容被 footer 遮挡 */
+/* Add container and footer space */
 #app > div.container {
     margin-bottom: 100px;
+}
+
+/* Topic Show Page */
+
+@import "topic_body";
+
+.topics-show-page {
+
+    .card {
+        padding: 15px;
+
+        h1 {
+            margin: 0.4em auto 0.6em;
+            font-size: 28px;
+            line-height: 38px;
+        }
+    }
 }
