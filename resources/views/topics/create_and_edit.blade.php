@@ -1,7 +1,7 @@
 @php use Illuminate\Support\Facades\Vite; @endphp
 @extends('layouts.app')
 
-@section('title', isset($topic) ? 'トピックを編集' : '新規トピックを作成')
+@section('title', isset($topic) ? 'トピックを編集' : 'トピックを作成')
 
 @section('content')
 
@@ -13,54 +13,49 @@
                     <h2 class="">
                         <i class="far fa-edit"></i>
                         @if ($topic->id)
-                            トピックを編集
+                            {{ __('トピックを編集') }}
                         @else
-                            新規トピックを作成
+                            {{ __('新しいトピックを作成') }}
                         @endif
                     </h2>
 
                     <hr>
 
                     @if ($topic->id)
-                        {{-- 编辑模式：更新已有话题 --}}
                         <form action="{{ route('topics.update', $topic->id) }}" method="POST" accept-charset="UTF-8">
                             @method('PUT')
                             @else
-                                {{-- 创建模式：创建新话题 --}}
                                 <form action="{{ route('topics.store') }}" method="POST" accept-charset="UTF-8">
                                     @endif
                                     @csrf
 
-                                    {{-- 显示验证错误 --}}
                                     @include('shared._error')
 
-                                    {{-- 标题输入 --}}
                                     <div class="mb-3">
                                         <input class="form-control" type="text" name="title"
                                                value="{{ old('title', $topic->title) }}"
-                                               placeholder="タイトルを入力してください。" required/>
+                                               placeholder="{{ __('タイトルを入力してください。') }}" required/>
                                     </div>
 
-                                    {{-- 分类选择 --}}
                                     <div class="mb-3">
                                         <select class="form-control" name="category_id" required>
-                                            <option value="" hidden disabled selected>カテゴリーを選択してください。</option>
+                                            <option value="" hidden disabled
+                                                {{ $topic->id ? '' : 'selected'}}>{{ __('カテゴリを選択してください。') }}</option>
                                             @foreach ($categories as $value)
-                                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                <option value="{{ $value->id }}" {{ $topic->category_id == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    {{-- 正文内容 --}}
                                     <div class="mb-3">
                                 <textarea name="body" class="form-control" id="editor" rows="6"
-                                          placeholder="3文字以上入力してください。" required>{{ old('body', $topic->body) }}</textarea>
+                                          placeholder="{{ __('最低でも3文字を入力してください。') }}"
+                                          required>{{ old('body', $topic->body) }}</textarea>
                                     </div>
 
-                                    {{-- 提交按钮 --}}
                                     <div class="well well-sm">
                                         <button type="submit" class="btn btn-primary">
-                                            <i class="far fa-save mr-2" aria-hidden="true"></i> 保存
+                                            <i class="far fa-save mr-2" aria-hidden="true"></i> {{ __('保存') }}
                                         </button>
                                     </div>
                                 </form>
@@ -72,7 +67,6 @@
 @endsection
 
 @section('styles')
-    {{-- Simditor 编辑器的 CSS 文件 --}}
     @vite('resources/editor/css/simditor.css')
 @endsection
 
@@ -91,6 +85,16 @@
             window.$(document).ready(function() {
                 const editor = new Simditor({
                     textarea: window.$('#editor'),
+                    upload: {
+                        url: '{{ route('topics.upload_image') }}',
+                        params: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        fileKey: 'upload_file',
+                        connectionCount: 3,
+                        leaveConfirm: '{{ __('アップロード中です。ページを離れてもよろしいですか？') }}',
+                    },
+                    pasteImage: true,
                 });
             });
         }
