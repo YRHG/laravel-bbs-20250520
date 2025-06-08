@@ -17,7 +17,8 @@
                     <div class="media">
                         <div align="center">
                             <a href="{{ route('users.show', $topic->user->id) }}">
-                                <img class="thumbnail img-fluid" src="{{ $topic->user->avatar }}" width="300px" height="300px" alt="{{ $topic->user->name }}">
+                                <img class="thumbnail img-fluid" src="{{ $topic->user->avatar }}" width="300px"
+                                     height="300px" alt="{{ $topic->user->name }}">
                             </a>
                         </div>
                     </div>
@@ -43,15 +44,18 @@
                         {!! $topic->body !!}
                     </div>
 
-                    <div class="operate">
-                        <hr>
-                        <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-outline-secondary btn-sm" role="button">
-                            <i class="far fa-edit"></i> {{ __('Edit') }}
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary btn-sm" role="button">
-                            <i class="far fa-trash-alt"></i> {{ __('Delete') }}
-                        </a>
-                    </div>
+                    @can('update', $topic)
+                        <div class="operate">
+                            <hr>
+                            <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-outline-secondary btn-sm"
+                               role="button">
+                                <i class="far fa-edit"></i> {{ __('Edit') }}
+                            </a>
+                            <a href="#" class="btn btn-outline-secondary btn-sm" role="button">
+                                <i class="far fa-trash-alt"></i> {{ __('Delete') }}
+                            </a>
+                        </div>
+                    @endcan
 
                 </div>
             </div>
