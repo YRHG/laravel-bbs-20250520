@@ -19,7 +19,7 @@
                      src="{{ $user->avatar }}"
                      alt="{{ $user->name }}">
                 <div class="card-body">
-                    <h5><strong>{{ __('Profile') }}</strong></h5>
+                    <h5><strong>{{ __('プロフィール') }}</strong></h5>
                     <p>{{ $user->introduction }}</p>
                     <hr>
                     <h5><strong>{{ __('登録日') }}</strong></h5>
