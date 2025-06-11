@@ -51,12 +51,11 @@
                     </li>
                 @else
                     <li class="nav-item">
-
-                        <a class="nav-link mt-1 me-lg-2 fw-bold" href="{{ route('topics.create') }}">
+                        <a class="nav-link mt-1 mr-3 font-weight-bold" href="{{ route('topics.create') }}">
                             <i class="fa-solid fa-plus"></i>
                         </a>
                     </li>
-                    <li class="nav-item notification-badge">Add commentMore actions
+                    <li class="nav-item notification-badge">
                         <a class="nav-link ms-3 me-3 badge bg-secondary rounded-pill badge-{{ auth()->user()->notification_count > 0 ? 'hint' : 'secondary' }} text-white" href="{{ route('notifications.index') }}">
                             {{ auth()->user()->notification_count }}
                         </a>
@@ -66,28 +65,25 @@
                            data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <img src="{{ auth()->user()->avatar }}"
-                                 class="img-responsive img-circle" width="30px" height="30px" alt="{{ auth()->user()->name }}'s avatar">
+                                 class="img-responsive img-circle" width="30px" height="30px" alt="">
                             {{ auth()->user()->name }}
                         </a>
-                        {{-- Bootstrap 5 下拉菜单对齐 --}}
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item"
                                href="{{ route('users.show', auth()->user()) }}">
-                                <i class="far fa-user me-2"></i>&nbsp;
+                                <i class="far fa-user mr-2"></i>&nbsp;
                                 {{ __('Profile') }}
                             </a>
                             <a class="dropdown-item"
                                href="{{ route('users.edit', auth()->user()) }}">
-                                <i class="far fa-edit me-2"></i>&nbsp;
+                                <i class="far fa-edit mr-2"></i>&nbsp;
                                 {{ __('Edit Profile') }}
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
-                                {{-- 对于 onsubmit confirm, 如果需要本地化: confirm('{{ __("Are you sure you want to log out?") }}') --}}
                                 <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Are you sure you want to log out?');">
                                     @csrf
-                                    {{-- btn-block 是 Bootstrap 4 的类, Bootstrap 5 使用 w-100 --}}
-                                    <button class="btn btn-danger w-100" type="submit"
+                                    <button class="btn btn-block btn-danger" type="submit"
                                             name="button">{{ __('Logout') }}</button>
                                 </form>
                             </a>
