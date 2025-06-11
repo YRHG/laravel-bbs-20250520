@@ -26,15 +26,15 @@
                         <li class="nav-item">
                             @if($routeHasQueryOrder)
                                 <a class="nav-link {{ $currentOrder == 'default' ? 'active' : ''}}"
-                                   href="{{ Request::url() }}?order=default">{{ __('最終返信') }}</a>
+                                   href="{{ Request::url() }}?order=default">{{ __('Last Replied') }}</a>
                             @else
                                 <a class="nav-link active"
-                                   href="{{ Request::url() }}?order=default">{{ __('最終返信') }}</a>
+                                   href="{{ Request::url() }}?order=default">{{ __('Last Replied') }}</a>
                             @endif
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ $routeHasQueryOrder && $currentOrder == 'recent' ? 'active' : '' }}"
-                               href="{{ Request::url() }}?order=recent">{{ __('最新投稿') }}</a>
+                               href="{{ Request::url() }}?order=recent">{{ __('New Published') }}</a>
                         </li>
                     </ul>
                 </div>
