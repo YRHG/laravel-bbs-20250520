@@ -13,6 +13,7 @@ class NotificationsController extends Controller
      */
     public function index(): View
     {
+
         // 获取当前用户的通知，并进行分页
         $notifications = auth()->user()->notifications()->paginate(20);
 
