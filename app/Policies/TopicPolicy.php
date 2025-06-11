@@ -6,12 +6,18 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
+/**
+ * TopicPolicy 话题授权策略类
+ *
+ * 用于定义用户对话题（Topic）模型的各项操作权限。
+ */
 class TopicPolicy
 {
     /**
-     * 判断用户是否可以查看所有话题列表。
+     * 判断用户是否有权限查看所有话题列表。
      *
-     * 默认返回 false，表示不允许查看所有话题（通常用于后台权限控制）。
+     * @param User $user 当前登录用户
+     * @return bool 返回 false 表示不允许
      */
     public function viewAny(User $user): bool
     {
@@ -19,9 +25,11 @@ class TopicPolicy
     }
 
     /**
-     * 判断用户是否可以查看某个具体的话题。
+     * 判断用户是否有权限查看指定话题。
      *
-     * 默认返回 false，可根据需求调整（例如设置为 true 表示所有人都可以查看）。
+     * @param User $user 当前登录用户
+     * @param Topic $topic 要查看的话题
+     * @return bool 返回 false 表示不允许
      */
     public function view(User $user, Topic $topic): bool
     {
@@ -29,9 +37,10 @@ class TopicPolicy
     }
 
     /**
-     * 判断用户是否可以创建话题。
+     * 判断用户是否有权限创建话题。
      *
-     * 默认返回 false，实际项目中应返回 true 或根据用户角色判断。
+     * @param User $user 当前登录用户
+     * @return bool 返回 false 表示不允许
      */
     public function create(User $user): bool
     {
@@ -39,9 +48,11 @@ class TopicPolicy
     }
 
     /**
-     * 判断用户是否可以更新某个话题。
+     * 判断用户是否有权限更新指定话题。
      *
-     * 只有该用户是话题作者时才允许更新。
+     * @param User $user 当前登录用户
+     * @param Topic $topic 要更新的话题
+     * @return bool 若用户是话题作者则返回 true，否则返回 false
      */
     public function update(User $user, Topic $topic): bool
     {
@@ -49,9 +60,11 @@ class TopicPolicy
     }
 
     /**
-     * 判断用户是否可以删除某个话题。
+     * 判断用户是否有权限删除指定话题。
      *
-     * 仅作者本人可以删除该话题。
+     * @param User $user 当前登录用户
+     * @param Topic $topic 要删除的话题
+     * @return bool 若用户是话题作者则返回 true，否则返回 false
      */
     public function destroy(User $user, Topic $topic): bool
     {
@@ -59,9 +72,11 @@ class TopicPolicy
     }
 
     /**
-     * 判断用户是否可以恢复已删除的话题。
+     * 判断用户是否有权限恢复被删除的话题。
      *
-     * 默认不允许恢复删除的话题。
+     * @param User $user 当前登录用户
+     * @param Topic $topic 要恢复的话题
+     * @return bool 返回 false 表示不允许
      */
     public function restore(User $user, Topic $topic): bool
     {
@@ -69,9 +84,11 @@ class TopicPolicy
     }
 
     /**
-     * 判断用户是否可以永久删除话题（从数据库中彻底移除）。
+     * 判断用户是否有权限永久删除话题。
      *
-     * 默认不允许永久删除。
+     * @param User $user 当前登录用户
+     * @param Topic $topic 要永久删除的话题
+     * @return bool 返回 false 表示不允许
      */
     public function forceDelete(User $user, Topic $topic): bool
     {

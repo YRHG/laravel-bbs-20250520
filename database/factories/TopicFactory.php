@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use App\Models\Topic;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Faker\Factory as FakerFactory;
 
 /**
  * @extends Factory<Topic>
@@ -27,15 +27,18 @@ class TopicFactory extends Factory
         // 确保 updatedAt 大于等于 createdAt
         $updatedAt = $this->faker->dateTimeBetween($createdAt, 'now');
 
-        $sentence = $this->faker->sentence();
+        $fakerJa = FakerFactory::create('ja_JP');
+
+        $title = $fakerJa->realText(30);
+        $body = $fakerJa->realText(600);
 
         return [
-            'title' => $sentence,
-            'body' => $this->faker->paragraph(5),
-            'user_id' => User::all()->random()->id,
-            'category_id' => Category::all()->random()->id,
-            'excerpt' => Str::limit($sentence, 50),
-            'slug' => Str::slug($sentence),
+            'title' => $title,
+            'body' => $body,
+            'user_id' => DB::table('users')->inRandomOrder()->value('id'),
+            'category_id' => DB::table('categories')->inRandomOrder()->value('id'),
+            'excerpt' => Str::limit($body, 50),
+            'slug' => rawurlencode(Str::replace(' ', '-', $title)),
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
         ];

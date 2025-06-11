@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -12,20 +11,20 @@ return new class extends Migration
     {
         $categories = [
             [
-                'name'        => 'Share',
-                'description' => 'Share creations and discoveries',
+                'name' => 'シェア',
+                'description' => '作品や発見をみんなと共有しましょう',
             ],
             [
-                'name'        => 'Tutorials',
-                'description' => 'Development tips, recommended packages, etc.',
+                'name' => 'チュートリアル',
+                'description' => '開発のコツやおすすめのパッケージなどを紹介',
             ],
             [
-                'name'        => 'Q&A',
-                'description' => 'Be friendly and help each other',
+                'name' => 'Q&A',
+                'description' => '質問や疑問を気軽に相談・解決しましょう',
             ],
             [
-                'name'        => 'Announcements',
-                'description' => 'Site announcements',
+                'name' => 'お知らせ',
+                'description' => 'サイトからのお知らせを掲載します',
             ],
         ];
 
