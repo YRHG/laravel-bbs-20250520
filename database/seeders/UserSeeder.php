@@ -23,5 +23,13 @@ class UserSeeder extends Seeder
         $user->email = '975816342hhz@gmail.com';
         $user->avatar = config('app.url') . '/uploads/images/default-avatar/1000.png';
         $user->save();
+
+        // 赋予站长角色Add commentMore actions
+        $user->assignRole('Founder');
+
+        // 赋予管理员权限
+        $user = User::find(2);
+        $user->assignRole('Maintainer');
+
     }
 }
