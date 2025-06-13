@@ -8,11 +8,12 @@ use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     /**
-     * 除了 'show' 方法外，控制器中的其他方法都需要用户登录后才能访问。
+     * 除了 show 方法外，控制器中其他方法都需要用户已登录
      */
     public function __construct()
     {
@@ -20,10 +21,10 @@ class UserController extends Controller
     }
 
     /**
-     * 显示用户的个人主页。
+     * 显示用户的个人资料页面
      *
-     * @param User $user 用户模型实例（通过路由模型绑定获取）
-     * @return View 返回用户详情视图
+     * @param User $user
+     * @return View
      */
     public function show(User $user): View
     {
@@ -31,50 +32,86 @@ class UserController extends Controller
     }
 
     /**
-     * 显示用户资料编辑表单。
+     * 显示用户资料编辑表单
      *
-     * @param User $user 要编辑的用户
-     * @return View 返回编辑表单视图
-     * @throws AuthorizationException 如果没有权限编辑，抛出异常
+     * @param User $user
+     * @return View
+     * @throws AuthorizationException
      */
     public function edit(User $user): View
     {
-        $this->authorize('update', $user); // 权限检查，确保用户只能编辑自己的资料
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
     /**
-     * 更新用户资料。
+     * 更新用户的个人资料
      *
-     * @param UserRequest $request 表单验证请求类，包含用户输入
-     * @param ImageUploadHandler $uploader 图片上传处理类
-     * @param User $user 要更新的用户
-     * @return RedirectResponse 更新成功后重定向回用户资料页
-     * @throws AuthorizationException 没有权限时抛出异常
+     * @param UserRequest $request
+     * @param ImageUploadHandler $uploader
+     * @param User $user
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function update(UserRequest $request, ImageUploadHandler $uploader, User $user): RedirectResponse
     {
-        $this->authorize('update', $user); // 权限检查
-        $data = $request->all(); // 获取所有请求数据
+        $this->authorize('update', $user);
+        $data = $request->all();
 
-        // 如果用户上传了头像
+        // 处理头像上传
         if ($request->avatar) {
-            // 保存头像到本地，目录为 avatars，最大宽度为 416px
             $result = $uploader->save($request->avatar, 'avatars', $user->id, 416);
-
-            // 如果上传失败，返回并显示错误信息
             if ($result === false) {
-                return redirect()->back()->withErrors('图片上传失败，请重试。');
+                return redirect()->back()->withErrors('头像上传失败，请重试。');
             }
-
-            // 上传成功，更新头像路径
             $data['avatar'] = $result['path'];
         }
 
-        // 更新用户数据
+        // 更新用户资料
         $user->update($data);
-
-        // 跳转到用户主页，并显示成功提示
         return redirect()->route('users.show', $user->id)->with('success', '个人资料更新成功。');
+    }
+
+    /**
+     * 模拟登录为指定用户
+     *
+     * @param int $id 用户 ID
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function impersonateUser(int $id, Request $request): RedirectResponse
+    {
+        if (!auth()->user() || !app()->isLocal()) {
+            abort(403, '未经授权的操作。');
+        }
+
+        $user = User::find($id);
+
+        if ($user) {
+            auth()->user()->impersonate($user);
+            // 获取传递的重定向地址，没有则默认跳转到首页
+            $redirectTo = $request->input('redirect_to', '/');
+            return redirect($redirectTo);
+        }
+
+        return redirect()->back()->with('error', '用户不存在。');
+    }
+
+    /**
+     * 停止模拟登录，恢复为原用户
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function stopImpersonating(Request $request): RedirectResponse
+    {
+        if (!auth()->user() || !app()->isLocal()) {
+            abort(403, '未经授权的操作。');
+        }
+
+        auth()->user()->leaveImpersonation();
+        // 获取传递的重定向地址，没有则默认跳转到首页
+        $redirectTo = $request->input('redirect_to', '/');
+        return redirect($redirectTo);
     }
 }
