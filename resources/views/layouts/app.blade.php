@@ -37,6 +37,8 @@
     @include('layouts._footer')
 </div>
 
+     @includeWhen((auth()->check() && app()->isLocal()), 'layouts._impersonate')
+
 @yield('scripts')
 </body>
 </html>
