@@ -19,11 +19,13 @@
                      src="{{ $user->avatar }}"
                      alt="{{ $user->name }}">
                 <div class="card-body">
-                    <h5><strong>{{ __('プロフィール') }}</strong></h5>
+                    <h5><strong>{{ __('Profile') }}</strong></h5>
                     <p>{{ $user->introduction }}</p>
                     <hr>
-                    <h5><strong>{{ __('登録日') }}</strong></h5>
+                    <h5><strong>{{ __('Joined on') }}</strong></h5>
                     <p>{{ $user->created_at->diffForHumans() }}</p>
+                    <h5><strong>{{ __('Last Active') }}</strong></h5>
+                    <p title="{{  $user->last_active_at }}">{{ $user->last_active_at->diffForHumans() }}</p>
                 </div>
             </div>
         </div>
@@ -40,7 +42,8 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link bg-transparent {{ $hasRepliesParam ? '' : 'active' }}" href="{{ route('users.show', $user->id) }}">
+                            <a class="nav-link bg-transparent {{ $hasRepliesParam ? '' : 'active' }}"
+                               href="{{ route('users.show', $user->id) }}">
                                 {{ __('Topics') }}
                             </a>
                         </li>

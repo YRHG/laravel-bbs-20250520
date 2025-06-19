@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ActiveUserHelper;
+use App\Models\Traits\LastActiveAtHelper;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
@@ -23,16 +25,16 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  *
  *
- * @property int $id 用户 ID
- * @property string $name 用户名
- * @property string $email 邮箱
- * @property Carbon|null $email_verified_at 邮箱验证时间
- * @property string $password 密码
- * @property string|null $remember_token 记住我 Token
- * @property Carbon|null $created_at 创建时间
- * @property Carbon|null $updated_at 更新时间
- * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications 用户通知集合
- * @property-read int|null $notifications_count 通知数量
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
  * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -49,16 +51,16 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $introduction 个人简介
  * @method static Builder<static>|User whereAvatar($value)
  * @method static Builder<static>|User whereIntroduction($value)
- * @property-read Collection<int, Topic> $topics 用户发布的话题集合
- * @property-read int|null $topics_count 用户话题数量
- * @property-read Collection<int, Reply> $replies 用户的回复集合
- * @property-read int|null $replies_count 回复数量
- * @property int $notification_count 未读通知数量
+ * @property-read Collection<int, Topic> $topics
+ * @property-read int|null $topics_count
+ * @property-read Collection<int, Reply> $replies
+ * @property-read int|null $replies_count
+ * @property int $notification_count
  * @method static Builder<static>|User whereNotificationCount($value)
- * @property-read Collection<int, Permission> $permissions 用户权限集合
- * @property-read int|null $permissions_count 权限数量
- * @property-read Collection<int, Role> $roles 用户角色集合
- * @property-read int|null $roles_count 角色数量
+ * @property-read Collection<int, Permission> $permissions
+ * @property-read int|null $permissions_count
+ * @property-read Collection<int, Role> $roles
+ * @property-read int|null $roles_count
  * @method static Builder<static>|User permission($permissions, $without = false)
  * @method static Builder<static>|User role($roles, $guard = null, $without = false)
  * @method static Builder<static>|User withoutPermission($permissions)
@@ -68,27 +70,26 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, MustVerifyEmailTrait, HasRoles, Impersonate;
+    use HasFactory, MustVerifyEmailTrait, HasRoles, Impersonate, ActiveUserHelper, LastActiveAtHelper;
 
     use Notifiable {
         notify as protected laravelNotify;
     }
 
     /**
-     * 重写 notify 方法，用于处理通知逻辑
+     * Rewrite the notify method to handle notifications.
      *
-     * @param $instance 通知实例
+     * @param $instance
      * @return void
      */
     public function notify($instance): void
     {
-        // 如果是当前用户，且不是邮箱验证通知，则不执行通知
+        // If the notification is a VerifyEmail notification, we don't want to notify the user and if the notification is for the current user.
         if ($this->id === auth()->id() && get_class($instance) !== VerifyEmail::class) {
             return;
         }
 
-        // 仅当通知支持 toDatabase 方法时才计数（即为数据库通知），
-        // Email 或其他方式通知不增加计数
+        // 只有数据库类型的通知才需要提醒, 直接发送 Email 或者其他的都不需要增加通知计数
         if (method_exists($instance, 'toDatabase')) {
             $this->increment('notification_count');
         }
@@ -97,7 +98,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 可批量赋值的字段
+     * The attributes that are mass assignable.
      *
      * @var list<string>
      */
@@ -110,7 +111,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * 序列化时需要隐藏的字段
+     * The attributes that should be hidden for serialization.
      *
      * @var list<string>
      */
@@ -120,7 +121,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * 属性类型转换
+     * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -133,7 +134,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 用户拥有多个话题
+     * User has many topic.
      *
      * @return HasMany
      */
@@ -143,7 +144,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 判断用户是否为模型的作者
+     * Check if the user is the author of the given model.
      *
      * @param $model
      * @return bool
@@ -154,7 +155,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 用户拥有多个回复
+     * User has many replies.
      *
      * @return HasMany
      */
@@ -164,7 +165,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 标记所有通知为已读
+     * Mark all notifications as read.
      *
      * @return void
      */

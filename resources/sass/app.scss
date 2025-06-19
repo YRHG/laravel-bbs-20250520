@@ -36,7 +36,6 @@ html {
 }
 
 body {
-    /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
 
@@ -45,7 +44,6 @@ body {
     margin-top: 60px;
     bottom: 0;
     width: 100%;
-    /* Set the fixed height of the footer here */
     height: 60px;
     background-color: #000;
 
@@ -65,7 +63,6 @@ body {
     }
 }
 
-/* User register page */
 .register-page {
     img.captcha {
         cursor: pointer;
@@ -75,7 +72,6 @@ body {
     }
 }
 
-/* Topic Index Page */
 .topics-index-page, .categories-show-page {
     .topic-list {
         .nav > li > a {
@@ -112,17 +108,13 @@ body {
     }
 }
 
-/* Add container and footer space */
 #app > div.container {
     margin-bottom: 100px;
 }
 
-/* Topic Show Page */
-
 @import "topic_body";
 
 .topics-show-page {
-
     .card {
         padding: 15px;
 
@@ -134,7 +126,6 @@ body {
     }
 }
 
-/* 回复列表 */
 .topic-reply {
     a {
         color: inherit;
@@ -146,7 +137,6 @@ body {
     }
 }
 
-/* 消息通知 */
 .notification-badge {
     .badge {
         font-size: 12px;
@@ -165,3 +155,8 @@ body {
 .d-flex > .me-3 {
     flex-shrink: 0;
 }
+
+// 最后引入 Tailwind，使用 tw- 前缀，不影响现有样式
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';

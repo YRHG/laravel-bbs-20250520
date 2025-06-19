@@ -1,61 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ☯️ {{ app.name }}
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+  <img src="https://img.shields.io/badge/laravel-12.x-orange.svg" alt="Laravel Version">
+  <img src="https://img.shields.io/badge/php-8.4%2B-blue.svg" alt="PHP Version">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  </p>
 
-## About Laravel
+> `{{ app.name }}` 是一个基于 Laravel Framework 构建的现代化、功能强大的论坛（BBS）系统。它深度整合了多种流行技术，旨在提供一个高性能、高扩展性的社区解决方案。
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📦 技术栈 (Technology Stack)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **后端框架**: Laravel Framework 12.14.1
+- **编程语言**: PHP 8.4+
+- **数据库**: MySQL 8.0+ / MariaDB 10.6+
+- **核心依赖**: Composer for PHP
+- **前端构建**: Vite
+- **前端依赖**: Yarn / npm
+- **前端样式**: Bootstrap ^5.3.6 & Tailwind CSS ^3.4.1 混合方案
+- **缓存/队列**: Redis, Horizon 可视化队列管理
+- **核心功能**: 中间件, 事件监听, 任务调度, 消息队列等
+- **图标库**: FontAwesome
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🚀 安装与配置 (Installation & Setup)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+请遵循以下步骤，在您的本地环境中快速部署本项目。
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1.  **克隆代码仓库**
+    ```bash
+    git clone git@github.com:LuStormstout/laravel-bbs-202503.git
+    cd laravel-bbs-202503
+    ```
 
-## Laravel Sponsors
+2.  **安装依赖**
+    ```bash
+    # 安装 PHP 依赖包
+    composer install
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    # 安装 Node.js 依赖包
+    yarn install
+    ```
 
-### Premium Partners
+3.  **配置环境**
+    ```bash
+    # 1. 复制环境文件
+    cp .env.example .env
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+    # 2. 生成应用密钥
+    php artisan key:generate
+    ```
+    > **重要**: 请手动打开 `.env` 文件，配置您的数据库连接信息 (`DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) 以及 Redis 连接等。
 
-## Contributing
+4.  **数据库初始化**
+    ```bash
+    # 运行数据表迁移并填充初始数据
+    php artisan migrate --seed
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5.  **启动服务**
+    ```bash
+    # 启动 PHP 内置服务器 (后端)
+    php artisan serve
 
-## Code of Conduct
+    # 启动 Vite 开发服务器 (前端)
+    yarn dev
+    ```
+    🎉 恭喜！现在项目已在本地成功运行。
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📂 核心目录结构 (Directory Structure)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- `app/` - 应用核心逻辑 (模型、控制器、服务等)。
+- `config/` - 应用的所有配置文件。
+- `database/` - 数据库迁移、数据工厂和数据填充器。
+- `public/` - Web 服务器的根目录，前端资源的入口。
+- `resources/` - 未编译的前端资源 (Blade 视图, Sass, JavaScript)。
+- `routes/` - 应用的所有路由定义。
+- `storage/` - 编译后的 Blade 模板、缓存、日志等。
+- `tests/` - 自动化测试文件。
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📅 定时任务 (Scheduler)
+
+本项目使用 Laravel 任务调度来执行周期性任务 (例如：每日数据统计)。为使其正常工作，您需要在服务器上添加一条 Cron 记录。
+
+1.  打开 `crontab` 进行编辑：
+    ```bash
+    crontab -e
+    ```
+
+2.  添加以下行，并确保项目路径正确无误：
+    ```bash
+    * * * * * cd /path/to/your/project && php artisan schedule:run >> /dev/null 2>&1
+    ```
+
+---
+
+## 🌐 Nginx 生产环境配置示例
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com; # 替换成您的域名
+
+    root /path/to/your/project/public; # 替换成您项目的 public 目录路径
+    index index.php index.html;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?<span class="math-inline">que<1\>ry\_string;
+\}
+location \= /favicon\.ico \{ access\_log off; log\_not\_found off; \}
+location \= /robots\.txt  \{ access\_log off; log\_not\_found off; \}
+location \~ \\\.php</span> {
+        include fastcgi_params;
+        # 根据您的 PHP-FPM 配置，路径可能不同
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock; 
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
