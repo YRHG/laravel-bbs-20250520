@@ -12,7 +12,7 @@ class SyncUserActiveAt extends Command
      *
      * @var string
      */
-    protected $signature = 'pandaria:sync-user-active-at';
+    protected $signature = 'JX-Online-3:sync-user-active-at';
 
     /**
      * The console command description.

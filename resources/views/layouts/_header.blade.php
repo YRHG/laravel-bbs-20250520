@@ -43,8 +43,9 @@
                 <img src="{{ asset('images/JX3_Online_logo.png') }}" alt="{{ config('app.name', '纯阳宫') }} Logo" style="height: 35px;">
             </a>
 
-
+            <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
+                <!-- Authentication Links -->
                 @guest
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
@@ -61,27 +62,34 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <img src="{{ auth()->user()->avatar }}"
                                  class="img-responsive img-circle" width="30px" height="30px" alt="">
-                            {{ auth()->user()->name }}
+                            <span class="ms-2">{{ auth()->user()->name }}</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item"
                                href="{{ route('users.show', auth()->user()) }}">
-                                <i class="far fa-user mr-2"></i>&nbsp;
+                                <i class="far fa-user me-1"></i>&nbsp;
                                 {{ __('Profile') }}
                             </a>
                             <a class="dropdown-item"
                                href="{{ route('users.edit', auth()->user()) }}">
-                                <i class="far fa-edit mr-2"></i>&nbsp;
+                                <i class="far fa-edit me-1"></i>&nbsp;
                                 {{ __('Edit Profile') }}
                             </a>
+                            @if(auth()->user()->hasRole('Founder') || auth()->user()->hasRole('Maintainer'))
+                                <a class="dropdown-item"
+                                   href="{{ route('admin.dashboard') }}">
+                                    <i class="fa-solid fa-gauge-high me-1"></i>
+                                    {{ __('Dashboard') }}
+                                </a>
+                            @endif
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
-                                <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Are you sure you want to log out?');">
+                                <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to log out?') }}');">
                                     @csrf
                                     <button class="btn btn-block btn-danger" type="submit"
                                             name="button">{{ __('Logout') }}</button>
