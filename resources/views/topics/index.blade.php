@@ -1,9 +1,10 @@
 @php
+    use App\Models\Setting;
     use Illuminate\Support\Facades\Request;
 
     $routeHasQueryOrder = Request::has('order');
     $currentOrder = Request::get('order', 'default'); // 默认值为 'default'
-    $settings = \App\Models\Setting::getSettingsFromCache();
+    $settings = Setting::getSettingsFromCache();
     $titlePart1 = $settings['site_name']->value ?? env('APP_NAME');
     $titlePart2 = isset($category) ? $category->name : __('Topics');
     $title = "$titlePart1 - $titlePart2";

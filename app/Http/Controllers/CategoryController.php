@@ -8,19 +8,18 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Symfony\Component\VarDumper\Caster\LinkStub;
 
 class CategoryController extends Controller
 {
     /**
-     * 显示指定分类下的话题列表。
+     * Show the topics in a specific category.
      *
-     * @param Category $category 分类模型实例
-     * @param Request $request 请求对象
-     * @param Topic $topic 话题模型实例
-     * @param User $user 用户模型实例
-     * @param Link $link 链接模型实例
-     * @return View 返回视图
+     * @param Category $category
+     * @param Request $request
+     * @param Topic $topic
+     * @param User $user
+     * @param Link $link
+     * @return View
      */
     public function show(Category $category, Request $request, Topic $topic, User $user, Link $link): View
     {

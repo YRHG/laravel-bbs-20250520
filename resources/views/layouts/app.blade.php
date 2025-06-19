@@ -6,22 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{-- 保留第二个文件原有的本地图标 --}}
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" type="image/x-icon"
+          href="{{ asset('images/favicon.png') }}">
 
+    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- 从第一个文件引入：从缓存或数据库加载网站设置 --}}
     @php$settings = \App\Models\Setting::getSettingsFromCache();@endphp
 
-    {{-- 保留第二个文件原有的标题逻辑，从 config('app.name') 获取默认值 --}}
-    <title>@yield('title', config('app.name'))</title>
+    <title>@yield('title', $settings['site_name']->value ?? '')</title>
 
-    {{-- 从第一个文件引入：SEO meta 标签，并优化了 description 的逻辑 --}}
-    {{-- 优先使用页面独立的 description，如果没有，则使用后台设置的全局 description --}}
-    <meta name="description" content="@yield('description', $settings['seo_description']->value ?? config('app.name'))"/>
-    <meta name="keywords" content="{{ $settings['seo_keywords']->value ?? '' }}"/>
+    <meta name="description" content="{{ $settings['seo_description']->value ?? 'JX-Online-3 bbs' }}"/>
+    <meta name="description" content="@yield('description', 'JX-Online-3 bbs')"/>
 
+    <meta name="keywords" content="{{ $settings['seo_keywords']->value ?? 'JX-Online-3 bbs' }}"/>
+
+    <!-- Use vite include styles and scripts. -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     @yield('styles')

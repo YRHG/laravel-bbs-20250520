@@ -13,7 +13,7 @@ class CalculateActiveUser extends Command
      *
      * @var string
      */
-    protected $signature = 'pandaria:calculate-active-user';
+    protected $signature = 'JX-Online-3:calculate-active-user';
 
     /**
      * The console command description.

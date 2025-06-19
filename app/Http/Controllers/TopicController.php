@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 class TopicController extends Controller
 {
     /**
-     * 除了查看和显示，其他操作都要求用户登录。
+     * Only authenticated users can create or edit and destroy topics.
      */
     public function __construct()
     {
@@ -26,13 +26,13 @@ class TopicController extends Controller
     }
 
     /**
-     * 显示话题列表页面。
+     * Display a listing of the resource.
      *
-     * @param Request $request 请求对象
-     * @param Topic $topic 话题模型实例
-     * @param User $user 用户模型实例
-     * @param Link $link 链接模型实例
-     * @return View 返回视图
+     * @param Request $request
+     * @param Topic $topic
+     * @param User $user
+     * @param Link $link
+     * @return View
      */
     public function index(Request $request, Topic $topic, User $user, Link $link): View
     {
@@ -47,10 +47,10 @@ class TopicController extends Controller
     }
 
     /**
-     * 显示创建话题的表单页面。
+     * Show the form for creating a new resource.
      *
-     * @param Topic $topic 话题模型实例
-     * @return View 返回视图
+     * @param Topic $topic
+     * @return View
      */
     public function create(Topic $topic): View
     {
@@ -59,11 +59,11 @@ class TopicController extends Controller
     }
 
     /**
-     * 保存新创建的话题数据。
+     * Store a newly created resource in storage.
      *
-     * @param StoreTopicRequest $request 表单验证请求
-     * @param Topic $topic 话题模型实例
-     * @return RedirectResponse 重定向响应
+     * @param StoreTopicRequest $request
+     * @param Topic $topic
+     * @return RedirectResponse
      */
     public function store(StoreTopicRequest $request, Topic $topic): RedirectResponse
     {
@@ -71,16 +71,16 @@ class TopicController extends Controller
         $topic->user()->associate($request->user());
         $topic->save();
 
-        return redirect()->to($topic->link())->with('success', '话题创建成功。');
+        return redirect()->to($topic->link())->with('success', 'Topic created successfully.');
     }
 
     /**
-     * 显示某个具体话题的详细内容。
-     * 如果话题存在 slug，但与请求中的不一致，则重定向到正确链接。
+     * Display the specified resource.
+     * If the topic has a slug, and it does not match the request slug, redirect to the topic's link.
      *
-     * @param Topic $topic 话题模型实例
-     * @param string|null $slug 可选的 URL slug
-     * @return View|RedirectResponse 返回视图或重定向
+     * @param Topic $topic
+     * @param ?null $slug
+     * @return View|RedirectResponse
      */
     public function show(Topic $topic, $slug = null): View|RedirectResponse
     {
@@ -92,11 +92,11 @@ class TopicController extends Controller
     }
 
     /**
-     * 显示编辑话题的表单页面。
+     * Show the form for editing the specified resource.
      *
-     * @param Topic $topic 话题模型实例
-     * @return View 返回视图
-     * @throws AuthorizationException 未授权时抛出
+     * @param Topic $topic
+     * @return View
+     * @throws AuthorizationException
      */
     public function edit(Topic $topic): View
     {
@@ -106,12 +106,8 @@ class TopicController extends Controller
     }
 
     /**
-     * 更新指定话题的数据。
-     *
-     * @param UpdateTopicRequest $request 表单验证请求
-     * @param Topic $topic 话题模型实例
-     * @return RedirectResponse 重定向响应
-     * @throws AuthorizationException 未授权时抛出
+     * Update the specified resource in storage.
+     * @throws AuthorizationException
      */
     public function update(UpdateTopicRequest $request, Topic $topic): RedirectResponse
     {
@@ -120,52 +116,52 @@ class TopicController extends Controller
         $topic->fill($request->validated());
         $topic->save();
 
-        return redirect()->to($topic->link())->with('success', '话题更新成功。');
+        return redirect()->to($topic->link())->with('success', 'Topic updated successfully.');
     }
 
     /**
-     * 删除指定的话题。
+     * Remove the specified resource from storage.
      *
-     * @param Topic $topic 话题模型实例
-     * @return RedirectResponse 重定向响应
-     * @throws AuthorizationException 未授权时抛出
+     * @param Topic $topic
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function destroy(Topic $topic): RedirectResponse
     {
         $this->authorize('destroy', $topic);
         $topic->delete();
 
-        return redirect()->route('topics.index')->with('success', '话题删除成功。');
+        return redirect()->route('topics.index')->with('success', 'Topic deleted successfully.');
     }
 
     /**
-     * 上传话题相关图片。
+     * Topic upload image.
      *
-     * @param Request $request 请求对象
-     * @param ImageUploadHandler $uploader 图片上传处理器
-     * @return JsonResponse JSON 响应
+     * @param Request $request
+     * @param ImageUploadHandler $uploader
+     * @return JsonResponse
      */
     public function uploadImage(Request $request, ImageUploadHandler $uploader): JsonResponse
     {
         // 初始化返回数据，默认上传失败
         $data = [
             'success' => false,
-            'message' => '上传失败！',
+            'message' => 'Upload failed!',
             'file_path' => ''
         ];
 
-        // 判断是否有上传文件，并赋值给 $file
+        // 判断是否有上传文件, 并赋值给 $file
         if ($file = $request->upload_file) {
-            // 保存图片到本地，限制最大宽度为 1024
+            // 保存图片到本地
             $result = $uploader->save($file, 'topics', auth()->user()->id, 1024);
 
             // 如果上传成功
             if ($result) {
                 $data['success'] = true;
-                $data['message'] = '上传成功！';
+                $data['message'] = 'Upload successful!';
                 $data['file_path'] = $result['path']; // 返回图片的存储路径
             } else {
-                $data['message'] = '图片格式不正确或上传失败。';
+                $data['message'] = 'Invalid image format or upload failed.';
             }
         }
         return response()->json($data);
